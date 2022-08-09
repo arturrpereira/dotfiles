@@ -22,6 +22,7 @@ call plug#end()
 
 " ativar sintaxe colorida
 syntax on
+set signcolumn=no
 
 " ativa o clique do mouse para navegação pelos documentos
 set mouse=a
@@ -81,5 +82,4 @@ map sh <C-w>h
 map sk <C-w>k
 map sj <C-w>j
 map sl <C-w>l
-
 
