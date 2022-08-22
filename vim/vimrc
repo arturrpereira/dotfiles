@@ -5,13 +5,22 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'preservim/nerdcommenter'
 Plug 'dracula/vim', { 'name': 'dracula' }
-Plug 'preservim/nerdtree'
+" Plug 'preservim/nerdtree'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'jiangmiao/auto-pairs'
-
+Plug 'kyazdani42/nvim-web-devicons'
+" Plug 'ryanoasis/vim-devicons'
+Plug 'tpope/vim-fugitive'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.0' }
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'vim-syntastic/syntastic'
 call plug#end()
 
+nnoremap <SPACE> <Nop>
+map <Space> <Leader>
 " ativar indentação automática
 " set autoindent
 
@@ -34,9 +43,22 @@ set number
 " ao teclar tab o Vim irá substutuir por 2 espaços
 set tabstop=3 softtabstop=3 expandtab shiftwidth=3
 
-map <C-n> :NERDTreeToggle<cr>
+" map <C-n> :NERDTreeToggle<cr>
 " autocmd VimEnter * NERDTree | wincmd p
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+" autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+set laststatus=2
+" let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+" let g:airline_statusline_ontop=0
+let g:airline#extensions#branch#enabled = 1
+" let g:airline_theme='base16_twilight'
+
+" let g:airline#extensions#tabline#formatter = 'default'
+" navegação entre os buffers
+nnoremap <M-Right> :bn<cr>
+nnoremap <M-Left> :bp<cr>
+nnoremap <c-x> :bp\|bd #<cr>
 
 let g:AutoPairsMapCR = 0
 
@@ -50,13 +72,13 @@ let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standar
 let g:ctrlp_show_hidden = 1
 
 set laststatus=2
-let g:airline#extensions#tabline#enabled = 1
+" let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts = 1
-let g:airline_statusline_ontop=0
+" let g:airline_statusline_ontop=0
 
 set guifont=Fira\ Code\ Medium\ :h12
 
-let g:airline#extensions#tabline#formatter = 'default'
+" let g:airline#extensions#tabline#formatter = 'default'
 " navegação entre os buffers
 nnoremap <M-Right> :bn<cr>
 nnoremap <M-Left> :bp<cr>
@@ -83,3 +105,13 @@ map sk <C-w>k
 map sj <C-w>j
 map sl <C-w>l
 
+" Config cocnvim"
+let g:coc_disable_startup_warning = 1
+"
+" Find files using Telescope command-line sugar.
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+map <C-w> :w<cr>
