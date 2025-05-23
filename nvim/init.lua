@@ -12,8 +12,15 @@ vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find f
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
 vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
+vim.keymap.set('n', '<leader>fmp', ":silent !black %<cr>", {silent = true})
 
-vim.cmd.colorscheme "gruvbox"
+-- DiffView
+vim.keymap.set('n', '<leader>gd', ":DiffviewOpen<CR>", {silent = true})
+vim.keymap.set('n', '<leader>q', ":DiffviewClose<CR>", {silent = true})
+vim.cmd.colorscheme "dracula"
+vim.api.nvim_set_hl(0, 'DiffChange', { bg = "#3f473c"})
+vim.api.nvim_set_hl(0, 'DiffText', { bg = "#415e44"})
+
 vim.o.background = "dark"
 
 -- Reserve a space in the gutter
