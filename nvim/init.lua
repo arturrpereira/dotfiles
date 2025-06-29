@@ -5,6 +5,7 @@ vim.opt.number = true
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
 vim.opt.wrap = false
+vim.opt.hlsearch = false
 
 -- telescope binds
 local builtin = require('telescope.builtin')
@@ -12,8 +13,24 @@ vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find f
 vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
 vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
 vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
+vim.keymap.set('n', '<leader>fmp', ":silent !black %<cr>")
+vim.keymap.set('n', '<leader>o', ':only<CR>', { noremap = true, silent = true })
+vim.keymap.set("n", "<A-Right>", "<C-w>>", { noremap = true })
+vim.keymap.set("n", "<A-Left>", "<C-w><", { noremap = true })
+vim.keymap.set("n", "<leader>sh", ":split<CR>", { noremap = true })
+vim.keymap.set("n", "<leader>sv", ":vsplit<CR>", { noremap = true })
+vim.keymap.set("n", "<leader>os", ":Telescope find_files search_dirs={'/home/artur/obsidian/'}<cr>")
+vim.keymap.set("n", "<leader>on", ":ObsidianTemplate note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>")
+vim.keymap.set("n", "<leader>of", ":s/\\(# \\)[^_]*_/\\1/ | s/-/ /g<cr>")
+vim.keymap.set("n", "<leader>e", ":NvimTreeFindFileToggle<cr>")
 
-vim.cmd.colorscheme "gruvbox"
+-- DiffView
+vim.keymap.set('n', '<leader>gd', ":DiffviewOpen<CR>", {silent = true})
+vim.keymap.set('n', '<leader>q', ":DiffviewClose<CR>", {silent = true})
+vim.cmd.colorscheme "dracula"
+vim.api.nvim_set_hl(0, 'DiffChange', { bg = "#3f473c"})
+vim.api.nvim_set_hl(0, 'DiffText', { bg = "#415e44"})
+
 vim.o.background = "dark"
 
 -- Reserve a space in the gutter
@@ -55,20 +72,30 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- require('lspconfig').rust_analyzer.setup({})
 require('lspconfig').lua_ls.setup({})
 require('lspconfig').pyright.setup({})
+require('lspconfig').gopls.setup({})
 
 local cmp = require('cmp')
+local luasnip = require("luasnip")
 
 cmp.setup({
   sources = {
     {name = 'nvim_lsp'},
+  	{ name = "luasnip" }, -- fonte de snippets
+    { name = "buffer" },
   },
   snippet = {
     expand = function(args)
       -- You need Neovim v0.10 to use vim.snippet
-      vim.snippet.expand(args.body)
+			luasnip.lsp_expand(args.body)
     end,
   },
-  mapping = cmp.mapping.preset.insert({}),
+	mapping = cmp.mapping.preset.insert({
+  	['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-e>'] = cmp.mapping.abort(),
+    ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+  }),
 })
 
 -- disable netrw at the very start of your init.lua
