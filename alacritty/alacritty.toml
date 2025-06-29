@@ -1,0 +1,10 @@
+import = [
+  "~/.config/alacritty/dracula.toml"
+]
+[font]
+normal = { family = "SauceCodePro NerdFont", style="semibold"}
+size = 11
+[env]
+WINIT_X11_SCALE_FACTOR = "1.0"
+[window]
+startup_mode = "Maximized"
