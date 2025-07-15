@@ -8,7 +8,7 @@ export ZSH="$HOME/.oh-my-zsh"
 # load a random theme each time Oh My Zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="robbyrussell"
+ZSH_THEME="refined"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -111,9 +111,9 @@ eval $(keychain --agents ssh --eval --quiet ~/.ssh/artur-dev)
 eval "$(zoxide init zsh)"
 
 export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+# eval "$(pyenv init --path)"
+# eval "$(pyenv init -)"
+# eval "$(pyenv virtualenv-init -)"
 
 export CLOUDSDK_PYTHON=/home/artur/.pyenv/versions/3.11.0/bin/python
 export PATH="$HOME/.config/emacs/bin:$PATH"
@@ -122,7 +122,7 @@ alias tf='terraform'
 # alias dagster='z sv-orc && code .' 
 export XDG_CONFIG_HOME="$HOME/.config"
 export PATH="$HOME/.scripts:$PATH"
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+# eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 export WINIT_X11_SCALE_FACTOR=1
 
@@ -130,4 +130,7 @@ export WINIT_X11_SCALE_FACTOR=1
 alias oo="cd /home/artur/obsidian"
 
 # Go
-export PATH="$HOME/go/bin:$PATH"
+# export PATH="$HOME/go/bin:$PATH"
+
+export PATH=$PATH:/usr/local/go/bin
+export PATH="$PATH:$HOME/go/bin"
