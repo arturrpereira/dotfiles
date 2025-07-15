@@ -2,8 +2,8 @@ require("config.lazy")
 
 vim.opt.clipboard = 'unnamedplus'
 vim.opt.number = true
-vim.opt.tabstop = 2
-vim.opt.shiftwidth = 2
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 vim.opt.wrap = false
 vim.opt.hlsearch = false
 
@@ -23,21 +23,29 @@ vim.keymap.set("n", "<leader>os", ":Telescope find_files search_dirs={'/home/art
 vim.keymap.set("n", "<leader>on", ":ObsidianTemplate note<cr> :lua vim.cmd([[1,/^\\S/s/^\\n\\{1,}//]])<cr>")
 vim.keymap.set("n", "<leader>of", ":s/\\(# \\)[^_]*_/\\1/ | s/-/ /g<cr>")
 vim.keymap.set("n", "<leader>e", ":NvimTreeFindFileToggle<cr>")
+vim.keymap.set("n", "<leader>fmg", ":!gofmt -s -w %<CR>:e!<CR>", { desc = "Formatar arquivo Go com gofmt" })
+
+vim.opt.termguicolors = true
 
 -- DiffView
-vim.keymap.set('n', '<leader>gd', ":DiffviewOpen<CR>", {silent = true})
-vim.keymap.set('n', '<leader>q', ":DiffviewClose<CR>", {silent = true})
+-- vim.keymap.set('n', '<leader>gd', ":DiffviewOpen<CR>", {silent = true})
+-- vim.keymap.set('n', '<leader>q', ":DiffviewClose<CR>", {silent = true})
 vim.cmd.colorscheme "dracula"
-vim.api.nvim_set_hl(0, 'DiffChange', { bg = "#3f473c"})
-vim.api.nvim_set_hl(0, 'DiffText', { bg = "#415e44"})
-
+-- vim.api.nvim_set_hl(0, 'DiffChange', { bg = "#3f473c"})
+-- vim.api.nvim_set_hl(0, 'DiffText', { bg = "#415e44"})
+--
 vim.o.background = "dark"
 
 -- Reserve a space in the gutter
 vim.opt.signcolumn = 'yes'
 
+
+
+
 -- Add cmp_nvim_lsp capabilities settings to lspconfig
 -- This should be executed before you configure any language server
+--
+
 local lspconfig_defaults = require('lspconfig').util.default_config
 lspconfig_defaults.capabilities = vim.tbl_deep_extend(
   'force',
@@ -51,6 +59,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
   callback = function(event)
     local opts = {buffer = event.buf}
+	local client_id = event.data.client_id
+	local client = vim.lsp.get_client_by_id(client_id)
+
+	client.config = vim.tbl_deep_extend('force', client.config, {
+				settings = {
+
+			}
+		})
 
     vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
     vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
@@ -62,6 +78,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
     vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
     vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+
   end,
 })
 
@@ -70,9 +87,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 -- require('lspconfig').gleam.setup({})
 -- require('lspconfig').rust_analyzer.setup({})
+--
+--
+--
 require('lspconfig').lua_ls.setup({})
 require('lspconfig').pyright.setup({})
-require('lspconfig').gopls.setup({})
 
 local cmp = require('cmp')
 local luasnip = require("luasnip")
@@ -118,10 +137,35 @@ require("nvim-tree").setup({
   },
   renderer = {
     group_empty = true,
+	highlight_git = true,
   },
   filters = {
     dotfiles = true,
   },
+  diagnostics = {
+		enable = true,
+	}
 })
 
 vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
+
+require("lspconfig").gopls.setup({
+  on_attach = function(client, bufnr)
+        -- Ativa os inlay hints assim que o LSP for anexado
+     client.server_capabilities.inlayHintProvider = true
+  end,
+  -- Outras configurações do gopls (se houver)
+  settings = {
+    gopls = {
+      hints = {
+        assignVariableTypes = true,
+        compositeLiteralFields = true,
+        compositeLiteralTypes = true,
+        constantValues = true,
+        functionTypeParameters = true,
+        parameterNames = true,
+        rangeVariableTypes = true,
+      },
+    },
+  },
+})
